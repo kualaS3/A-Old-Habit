@@ -8,18 +8,17 @@ Anyway, I really love blackjack and although the statistics and probabilities ar
 
 I figure I'll edit this README again, but for now, the plan is to explore some statistical methods and implement a Object Oriented system with python. Before I begin, I have some semblance of a plan which involves multiple iterations, each one building on the previous one, until I have something thats close to the final product I have in mind. How many iterations? I have no idea, but I'll definitely be starting from the ground up with the basics and fundamentals. It's been a while.
 
-## Running it
+## How to play
 
 Python 3.10 or newer. Nothing to install to play. Every iteration lives in its own
 folder (`iteration_1`, `iteration_2`, ...) with the same layout, and the way to run
-each one is identical — only the folder name changes.
+each one is identical.
 
 From inside an iteration folder:
 
     python -m blackjack
 
-In Google Colab, clone the repo, then run this in a cell (shown for iteration 1 —
-swap in the folder of whichever iteration you want to play):
+In Google Colab, clone the repo, then run this in a cell (run below is for iteration 1 specifically):
 
     !git clone https://github.com/kualaS3/A-Old-Habit.git
     %cd A-Old-Habit/iteration_1
