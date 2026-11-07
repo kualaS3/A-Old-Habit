@@ -33,7 +33,7 @@ Python 3.10 or newer. Nothing to install to play.
 In Google Colab, clone the repo, then run this in a cell:
 
     !git clone https://github.com/kualaS3/A-Old-Habit.git
-    %cd A-Old-Habit/blackjack-oop
+    %cd A-Old-Habit/iteration_1
 
     from blackjack.cli import main
     main()
@@ -52,7 +52,7 @@ Tests: `pip install pytest`, then `python -m pytest`.
 
 ### Project layout
 
-    blackjack-oop/
+    iteration_1/
       blackjack/
         cards.py      Rank, Suit, Card
         shoe.py       Shoe: the deck(s)
