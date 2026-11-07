@@ -21,7 +21,7 @@ and the true count (running count divided by decks left). The dealer's face-down
 The odds are exact, not simulated. The program looks at the cards you haven't seen (the rest of the
 deck plus the dealer's face-down card) and works through every possible way the hand could play out.
 
-- **Stand**: you stop here, and the dealer draws to 17 or more.
+or more.
 - **Hit**: you take one card, then play whichever is better from there, stand or hit again.
 
 ### Running it
@@ -32,8 +32,8 @@ Python 3.10 or newer. Nothing to install to play.
 
 In Google Colab, clone the repo, then run this in a cell:
 
-    !git clone https://github.com/<your-username>/blackjack-oop.git
-    %cd blackjack-oop
+    !git clone https://github.com/kualaS3/A-Old-Habit.git
+    %cd A-Old-Habit/blackjack-oop
 
     from blackjack.cli import main
     main()
