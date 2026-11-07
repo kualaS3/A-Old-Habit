@@ -21,34 +21,10 @@ and the true count (running count divided by decks left). The dealer's face-down
 The odds are exact, not simulated. The program looks at the cards you haven't seen (the rest of the
 deck plus the dealer's face-down card) and works through every possible way the hand could play out.
 
-or more.
+- **Stand**: you stop here, and the dealer draws to 17 or more.
 - **Hit**: you take one card, then play whichever is better from there, stand or hit again.
 
-### Running it
-
-Python 3.10 or newer. Nothing to install to play.
-
-    python -m blackjack
-
-In Google Colab, clone the repo, then run this in a cell:
-
-    !git clone https://github.com/kualaS3/A-Old-Habit.git
-    %cd A-Old-Habit/iteration_1
-
-    from blackjack.cli import main
-    main()
-
-Type `h` to hit, `s` to stand, `q` to quit. Example:
-
-    Dealer shows: 6C
-    You:          8H 5C (13)
-    [Hi-Lo running count: +2 | true count: +2.4 | cards left: 43]
-      HIT   win  35.9%  push   4.4%  lose  59.8%  EV -0.239
-      STAND win  44.5%  push   0.0%  lose  55.5%  EV -0.110
-      Best: STAND
-    >
-
-Tests: `pip install pytest`, then `python -m pytest`.
+Running it: see the main README at the top of the repo — the instructions are the same for every iteration.
 
 ### Project layout
 
