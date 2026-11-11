@@ -37,7 +37,7 @@ rule toggles live here too, so one object describes the table you are sitting at
 Iteration 6b: kelly_fraction, the fraction of the full Kelly bet to stake
 (0.5, half Kelly, by default). The bet is kelly_fraction * edge / variance
 * bankroll, clamped to the table limits. The edge comes from the 6a curve
-and the variance from the 6a round variance.
+and the variance from the 6a total round variance.
 """
 
 from __future__ import annotations
