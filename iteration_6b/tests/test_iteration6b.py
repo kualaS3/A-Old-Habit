@@ -15,6 +15,7 @@ import pytest
 
 from blackjack.basic_strategy import BasicStrategy, is_standard_game
 from blackjack.cards import Card, Rank, Suit
+from blackjack.edge_curve import MEASURED_EDGE_CURVE
 from blackjack.hand import Hand
 from blackjack.kelly import FlatBetPolicy, KellyPolicy, edge_at, variance_at
 from blackjack.odds import Action
@@ -118,6 +119,17 @@ def test_edge_curve_interpolation():
     assert edge_at(TEST_CURVE, -10.0) == pytest.approx(-0.010)  # held
     assert edge_at(TEST_CURVE, 10.0) == pytest.approx(0.015)  # held
     assert variance_at(TEST_CURVE, 4.0) == pytest.approx(1.2)
+
+
+def test_kelly_variance_is_the_total_round_variance():
+    # variance_at reads the third column of the measured curve, and
+    # that column is now the total round variance: at the TC 0 bucket
+    # it is 1.287, from the independent 300-hand check, not the 1.048
+    # conditional variance the curve used to carry. The Kelly bet is
+    # placed before the cards are dealt, so it is the total that sizes
+    # it.
+    assert MEASURED_EDGE_CURVE is not None
+    assert variance_at(MEASURED_EDGE_CURVE, 0.5) == pytest.approx(1.287, abs=0.05)
 
 
 # ---- basic strategy ------------------------------------------------------
