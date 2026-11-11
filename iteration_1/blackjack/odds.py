@@ -60,7 +60,7 @@ class Analysis:
         return action in self.by_action
 
     def best(self) -> Action:
-        """Highest-EV action; STAND wins ties."""
+        """Highest-EV action. STAND wins ties."""
         best = Action.STAND
         for action, o in self.by_action.items():
             if o.ev > self.by_action[best].ev + 1e-12:
