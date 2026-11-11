@@ -3,8 +3,8 @@ from __future__ import annotations
 
 
 class Bankroll:
-    """Tracks the balance across a session. Every hand bets the same flat amount;
-    a double down needs the balance to cover twice that bet."""
+    """Tracks the balance across a session. Every hand bets the same flat amount.
+    A double down needs the balance to cover twice that bet."""
 
     def __init__(self, starting_balance: int = 100, bet: int = 1) -> None:
         if bet < 1:
@@ -31,6 +31,6 @@ class Bankroll:
         return self._balance >= 2 * self._bet
 
     def settle(self, net_units: int) -> int:
-        """Apply a hand's result (in bet units) to the balance; returns the balance."""
+        """Apply a hand's result (in bet units) to the balance. It returns the balance."""
         self._balance += net_units * self._bet
         return self._balance
