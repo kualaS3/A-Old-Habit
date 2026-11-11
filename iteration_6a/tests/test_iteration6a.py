@@ -23,6 +23,7 @@ from blackjack import split_exact
 from blackjack.cards import Card, Rank, Suit
 from blackjack.edge_curve import (
     EDGE_BUCKETS,
+    MEASURED_EDGE_CURVE,
     _deal_situations,
     deal_fresh_round,
     enumerate_fresh_round_edge,
@@ -591,13 +592,66 @@ def test_enumeration_matches_sampled_deals(calc):
     # computed two ways. Loose tolerance, since 300 deals still carry
     # a standard error near two hundredths.
     rules = Rules(num_decks=1)
-    ev, _var = enumerate_fresh_round_edge(SMALL_POOL, rules, calc)
+    ev, _var, _total_var = enumerate_fresh_round_edge(SMALL_POOL, rules, calc)
     rng = random.Random(20261111)
     evs = []
     for _ in range(300):
         h, upcard, unseen = deal_fresh_round(rng, SMALL_POOL)
         evs.append(fresh_round_moments(h, upcard, unseen, rules, calc)[0])
     assert sum(evs) / len(evs) == pytest.approx(ev, abs=0.08)
+
+
+def test_total_variance_is_the_conditional_plus_the_hand_spread(calc):
+    # The total round variance is the mean conditional variance plus
+    # the spread of the hand EVs across deals: total = mean var +
+    # (E[ev^2] - edge^2). On the small pool the enumeration is fast
+    # enough to check the identity directly, situation by situation,
+    # and the total must exceed the conditional, since the spread term
+    # is a variance and cannot be negative.
+    rules = Rules(num_decks=1)
+    ev, mean_var, total_var = enumerate_fresh_round_edge(SMALL_POOL, rules, calc)
+    e2 = 0.0
+    for hand, upcard, unseen, weight in _deal_situations(SMALL_POOL, 1):
+        hand_ev, _hand_var = fresh_round_moments(hand, upcard, unseen, rules, calc)
+        e2 += weight * hand_ev * hand_ev
+    assert total_var == pytest.approx(mean_var + (e2 - ev * ev), abs=1e-9)
+    assert total_var > mean_var
+
+
+def test_measured_curve_tc0_total_variance():
+    # The stored 6a curve must carry the total round variance in its
+    # third column: the TC 0 bucket is 1.287, from the independent
+    # 300-hand check, and the Kelly policy reads this column.
+    assert MEASURED_EDGE_CURVE is not None
+    tc0 = [p for p in MEASURED_EDGE_CURVE if p[0] == 0.5][0]
+    assert tc0[2] == pytest.approx(1.287, abs=0.05)
+
+
+def test_measured_curve_total_exceeds_conditional_in_every_bucket():
+    # The stored curve carries total variances. Each must exceed the
+    # conditional variance measured in the same bucket (the values
+    # recorded in the README table). The total is the conditional plus
+    # the spread of the hand EVs, which cannot be negative.
+    assert MEASURED_EDGE_CURVE is not None
+    conditional = [1.0899, 1.0787, 1.0520, 1.0478, 1.0450, 1.0114, 1.0061]
+    assert len(MEASURED_EDGE_CURVE) == len(conditional)
+    for point, cond in zip(MEASURED_EDGE_CURVE, conditional):
+        assert point[2] > cond
+
+
+@pytest.mark.skipif(
+    not os.environ.get("AOH_SLOW"),
+    reason="seven one-deck bucket enumerations take several minutes. Run with AOH_SLOW=1",
+)
+def test_total_variance_exceeds_conditional_in_every_bucket():
+    # Measure every bucket of the curve on one deck and check the total
+    # round variance exceeds the conditional variance in each: the
+    # difference is the spread of the hand EVs, which is a variance and
+    # cannot be negative.
+    rules = Rules(num_decks=1)
+    for bucket in EDGE_BUCKETS:
+        row = measure_bucket(random.Random(20261111), bucket, 1, rules)
+        assert row["mean_total_var"] > row["mean_var"]
 
 
 def test_edge_curve_rises_with_the_count():
@@ -653,10 +707,13 @@ def test_edge_curve_rises_with_the_count():
 def test_tc0_anchor_is_near_the_house_edge():
     # The validation for the whole curve: the enumerated TC 0 bucket on
     # a six-deck S17 DAS late-surrender 3:2 table must land near the
-    # known house edge, about -0.4%, with a round variance near 1.2.
+    # known house edge, about -0.4%, with a conditional round variance
+    # near 1.05 and a total round variance near 1.29.
     rng = random.Random(20261111)
     rules = Rules(num_decks=6)
     row = measure_bucket(rng, (0.0, 1.0), 6, rules)
     assert row["n"] == 1
     assert -0.010 < row["mean_ev"] < 0.0
     assert 0.8 < row["mean_var"] < 1.6
+    assert 1.0 < row["mean_total_var"] < 1.6
+    assert row["mean_total_var"] > row["mean_var"]
