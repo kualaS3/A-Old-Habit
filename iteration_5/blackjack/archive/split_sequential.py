@@ -10,7 +10,7 @@ verification tool, not the live engine.
 
 What it does: it values a split sequentially, in the order the game plays
 the hands. The hand being split is played to maximise the TOTAL ev of
-every hand; the hands still to come are valued by _tail_ev, each to
+every hand. The hands still to come are valued by _tail_ev, each to
 maximise its own ev, returning the expected dealer distribution after it
 -- so the first hand's decisions do account for what its cards do to the
 second hand and to the dealer. The one thing the later hands do not
@@ -222,7 +222,7 @@ def _tail_ev(
     Each hand is played to maximise its own ev, and the payoffs are the
     expected payoff of a finished hand standing on each total 2..21
     against the dealer distribution after every hand has played. A single
-    hand delegates to _hand_after; no hands left means the dealer plays
+    hand delegates to _hand_after. No hands left means the dealer plays
     now, from these counts.
     """
     key = (counts, hands, splits_used)
@@ -249,9 +249,9 @@ def _tail_ev(
     n = sum(counts)
     # Every candidate is (this hand's ev, per-hand EVs of the rest,
     # expected payoffs). The hand picks the action with the best ev for
-    # itself; the rest are valued the same way either way.
+    # itself. The rest are valued the same way either way.
     candidates = []
-    # STAND: this hand finishes on its best total; the rest play out.
+    # STAND: this hand finishes on its best total. The rest play out.
     evs_rest, payoffs_rest = _tail_ev(calc, counts, rest, splits_used)
     candidates.append((payoffs_rest[best - 2], evs_rest, payoffs_rest))
     if not restricted and best < 21 and n > 0:
@@ -373,7 +373,7 @@ def _play_split_first(
 ) -> float:
     """Total EV of all the split hands, with hands[0] played to maximise it.
 
-    hands[0] is the hand being split (or one of its resplits); hands[1:]
+    hands[0] is the hand being split (or one of its resplits). Hands[1:]
     are the hands still to come, valued by _tail_ev. When hands[0]
     finishes, the rest play out under their own policies and the total is
     its ev plus theirs.
@@ -403,8 +403,8 @@ def _play_split_first(
             candidates.append(
                 _draw_split_first(calc, counts, hands, splits_used, double=True)
             )
-        # RESPLIT: a pair under the cap. Aces need the resplit_aces toggle;
-        # any other pair resplits whenever the cap allows it.
+        # RESPLIT: a pair under the cap. Aces need the resplit_aces toggle.
+        # Any other pair resplits whenever the cap allows it.
         if (
             len(values) == 2
             and values[0] == values[1]
