@@ -74,7 +74,7 @@ class Analysis:
         return action in self.by_action
 
     def best(self) -> Action:
-        """Highest-EV action; STAND wins ties."""
+        """Highest-EV action. STAND wins ties."""
         best = Action.STAND
         for action, o in self.by_action.items():
             if o.ev > self.by_action[best].ev + 1e-12:
@@ -152,7 +152,7 @@ class OddsCalculator:
         """Take exactly one card, then stand, with the stake doubled.
 
         The win/push/lose figures are the same probabilities as standing after one
-        card; only the EV doubles, via stake=2.
+        card. Only the EV doubles, via stake=2.
         """
         n = sum(counts)
         acc = NO_ODDS
@@ -195,8 +195,8 @@ class OddsCalculator:
     ) -> list[float]:
         """Distribution of the dealer's final result. Returned lists are read-only.
 
-        exclude_first: on this (outermost) call only, the first card drawn — which
-        models the hole card — may not have this blackjack value, and the draw is
+        exclude_first: on this (outermost) call only, the first card drawn (which
+        models the hole card) may not have this blackjack value, and the draw is
         renormalised without it. That is the peek condition. Deeper draws are
         unconditioned. If every unseen card has the excluded value there is nothing
         to condition on and the draw falls back to unconditioned.
