@@ -1,7 +1,7 @@
 """One round of blackjack: deal, player decisions (including splits), dealer play.
 
 Iteration 3: the round works on the Player's list of hands instead of a single hand.
-A split replaces a pair with two hands in place; the new hands are then played one at
+A split replaces a pair with two hands in place. The new hands are then played one at
 a time, in order, against the same dealer hand. The dealer plays once, at the end,
 and only if at least one player hand is still live.
 """
@@ -43,7 +43,7 @@ class Round:
 
     def deal(self, bet: int) -> None:
         """Two cards each. The dealer's second card (the hole card) stays face down
-        and uncounted; the opening player hand carries the chosen bet."""
+        and uncounted. The opening player hand carries the chosen bet."""
         hand = Hand(bet=bet)
         self.player.hands = [hand]
         hand.add(self._draw_visible())
@@ -143,7 +143,7 @@ class Round:
     # ---- dealer and settlement ----------------------------------------------------
 
     def dealer_play(self) -> None:
-        """Reveal the hole card; the dealer draws only if some player hand is live."""
+        """Reveal the hole card. The dealer draws only if some player hand is live."""
         self.hole_revealed = True
         self._counter.observe(self._hole_card)
         if self.is_over or all(h.is_bust for h in self.hands):
