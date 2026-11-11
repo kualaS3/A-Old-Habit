@@ -20,8 +20,8 @@ From inside an iteration folder:
 
 In Google Colab, clone the repo, then run this in a cell (run below is for iteration 1 specifically):
 
-    !git clone https://github.com/kualaS3/A-Old-Habit.git
-    %cd A-Old-Habit/iteration_1
+    !git clone https://github.com/kualaS3/Twenty-One-piloted.git
+    %cd Twenty-One-piloted/iteration_1
 
     from blackjack.cli import main
     main()
