@@ -77,7 +77,7 @@ def test_variable_bet_scales_the_result():
          C(Rank.NINE, CL)],
         bet=5,
     )
-    rnd2.dealer_play()  # dealer 16 draws 9 and busts; player 18 wins the $5 bet
+    rnd2.dealer_play()  # dealer 16 draws 9 and busts. Player 18 wins the $5 bet
     assert rnd2.net_dollars() == 5
 
 
@@ -156,7 +156,7 @@ def test_jack_queen_cannot_split():
 
 
 def test_resplitting_stops_at_the_cap():
-    # A synthetic stack with more 8s than a real deck holds; stacked shoes allow it.
+    # A synthetic stack with more 8s than a real deck holds. Stacked shoes allow it.
     rnd = stacked_round(
         [C(Rank.EIGHT, S), C(Rank.SIX, H), C(Rank.EIGHT, H), C(Rank.TEN, D),
          C(Rank.EIGHT, D), C(Rank.EIGHT, CL),   # split 1: both hands pair up again
