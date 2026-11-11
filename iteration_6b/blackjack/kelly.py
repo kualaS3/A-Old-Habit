@@ -4,7 +4,11 @@ Iteration 6b. The Kelly criterion says the bet that maximises the
 growth of the bankroll is the edge divided by the variance, times the
 bankroll: bet = edge / variance * bankroll. Both inputs are measured,
 not guessed: the edge comes from the 6a edge-vs-true-count curve, and
-the variance is the 6a round variance. The policy bets a fraction of
+the variance is the 6a total round variance, the variance of the round
+before the cards are dealt. That total is the mean conditional variance
+given the dealt hand plus the spread of the hand EVs across deals. The
+conditional variance alone would understate the risk, because the hand
+you are dealt is part of the round. The policy bets a fraction of
 that (Rules.kelly_fraction, half Kelly by default), because full Kelly
 swings hard enough that most people bet a fraction of it, and the
 simulator is the way to see what each fraction costs in growth and
@@ -29,7 +33,7 @@ from __future__ import annotations
 from .rules import Rules
 
 # One point of the edge curve: (true-count centre, edge per unit bet,
-# round variance per unit bet squared).
+# total round variance per unit bet squared).
 CurvePoint = tuple[float, float, float]
 
 
@@ -58,7 +62,8 @@ def edge_at(curve: list[CurvePoint], tc: float) -> float:
 
 
 def variance_at(curve: list[CurvePoint], tc: float) -> float:
-    """The round variance per unit bet squared at this true count."""
+    """The total round variance per unit bet squared at this true count:
+    the variance of the round before the cards are dealt."""
     return _interpolate(curve, tc, 2)
 
 
