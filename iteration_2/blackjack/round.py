@@ -89,7 +89,7 @@ class Round:
         return card
 
     def dealer_play(self) -> None:
-        """Reveal the hole card; the dealer draws only if the player is still in the hand."""
+        """Reveal the hole card. The dealer draws only if the player is still in the hand."""
         self.hole_revealed = True
         self._counter.observe(self._hole_card)
         if self.player.is_bust or self.is_over:
