@@ -26,7 +26,7 @@ In Google Colab, clone the repo, then run this in a cell (run below is for itera
     from blackjack.cli import main
     main()
 
-At each decision you type a command and press enter; each iteration's own README
+At each decision you type a command and press enter. Each iteration's own README
 lists the commands that version supports.
 
 Tests: `pip install pytest`, then run `python -m pytest` inside the iteration folder.
