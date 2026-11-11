@@ -6,7 +6,7 @@ from enum import Enum
 
 
 class Rank(Enum):
-    """A card rank. Ace is valued 1 here; Hand promotes it to 11 when that is safe."""
+    """A card rank. Ace is valued 1 here. Hand promotes it to 11 when that is safe."""
 
     ACE = ("A", 1)
     TWO = ("2", 2)
@@ -36,7 +36,7 @@ class Rank(Enum):
 
 
 class Suit(Enum):
-    """Suits only matter for display; the maths never looks at them."""
+    """Suits only matter for display. The maths never looks at them."""
 
     SPADES = "S"
     HEARTS = "H"
