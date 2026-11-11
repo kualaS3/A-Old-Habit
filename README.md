@@ -1,12 +1,12 @@
 # A Old Habit
 
-What can I say? I have hobbies (not problems, I promise). And one of those hobbies includes the occasional (or not so occasional) gambling spree on my favourite card game: Blackjack. Just typical chinese habits I suppose. 
+I have hobbies (not problems, I promise). And one of those hobbies, particularly when I was on exchange in the States, included the occasional (or not so occasional) visit to the casino to play my favourite card game: Blackjack.
 
 It was my time on exchange at UC Davis, California where I really found my love for playing blackjack in real casinos, and I did some (definitely not obsessively) studying of the game and practicing at home before going out and trying my luck. It was an intimidating experience at first, but definitely one of my favourite thrilling past times after I got used to the casino environment. 
 
-Anyway, I really love blackjack and although the statistics and probabilities are definitely already well documented and programs similar to what I want to create exist, I figured it would be a fun project for me to practice some of programming skills and be a nice piece of work that I can not only talk about in job interviews, but that I can say is mine and have a little fun playing around with. 
+Anyway, I really love blackjack and although the statistics and probabilities are definitely already well documented, and programs similar to what I want to create exist, I figured it would be a fun project for me to practice some programming. Afterall, I think this can be a nice piece of work that'll not just be a piece of portfolio for job interviews, but a project that I can be quite proud of and give me another excuse to really do a deep dive into the game statistics and EV.
 
-I figure I'll edit this README again, but for now, the plan is to explore some statistical methods and implement a Object Oriented system with python. Before I begin, I have some semblance of a plan which involves multiple iterations, each one building on the previous one, until I have something thats close to the final product I have in mind. How many iterations? I have no idea, but I'll definitely be starting from the ground up with the basics and fundamentals. It's been a while.
+I figure I'll edit this README again, but for now, the plan is to explore some statistical methods and implement an Object Oriented system with python. Before I begin, I have some semblance of a plan which involves multiple iterations, each one building on the previous one, until I have something that's close to the final product I have in mind. How many iterations? I have no idea, but I'll definitely be starting from the ground up with the basics and fundamentals. It's been a while.
 
 ## How to play
 
