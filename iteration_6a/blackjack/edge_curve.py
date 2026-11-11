@@ -14,7 +14,8 @@ which plays optimally and includes the peek, the insurance choice and
 the even-money choice. The bucket value is the exact expectation over
 all deals from that composition, so there is no sampling noise in the
 dealing at all. The mean round variance comes along the same way, and
-the Kelly formula in iteration 6b needs both.
+so does the total round variance: the Kelly formula in iteration 6b
+needs the total, because the bet is placed before the cards are dealt.
 
 Why enumerate instead of dealing random rounds. The first version of
 this module dealt random rounds and averaged them, and the numbers came
@@ -94,21 +95,26 @@ EDGE_BUCKETS: tuple[tuple[float, float], ...] = (
 )
 
 
-# The measured edge curve: one (true-count centre, edge, mean round
+# The measured edge curve: one (true-count centre, edge, total round
 # variance) point per bucket of EDGE_BUCKETS, from the enumeration in
 # measure_edge_curve.py. Six decks, S17, double after split, late
-# surrender, 3:2, seed 20261111. The TC 0 bucket was measured exactly
-# and again with the slow-pair premium cache: both give -0.0038 and
-# 1.0478, so the premium bias is below the fourth decimal there. The
-# Kelly policy in 6b reads it from here.
+# surrender, 3:2, seed 20261111. The variance here is the TOTAL round
+# variance: the mean conditional variance given the dealt hand plus the
+# spread of the hand EVs across deals. Kelly sizing needs the total,
+# because the bet is placed before the cards are dealt. The TC 0
+# bucket was measured exactly and again with the slow-pair premium
+# cache: both give -0.0038 edge and 1.0478 conditional variance, so
+# the premium bias is below the fourth decimal there. The conditional
+# variances are still printed by the measurement script alongside the
+# totals. The Kelly policy in 6b reads it from here.
 MEASURED_EDGE_CURVE: list[tuple[float, float, float]] | None = [
-    (-2.5, -0.0153, 1.0899),
-    (-1.5, -0.0089, 1.0787),
-    (-0.5, -0.0047, 1.0520),
-    (0.5, -0.0038, 1.0478),
-    (1.5, 0.0023, 1.0450),
-    (2.5, 0.0071, 1.0114),
-    (4.0, 0.0141, 1.0061),
+    (-2.5, -0.0153, 1.3029),
+    (-1.5, -0.0089, 1.3053),
+    (-0.5, -0.0047, 1.2891),
+    (0.5, -0.0038, 1.2865),
+    (1.5, 0.0023, 1.2940),
+    (2.5, 0.0071, 1.2716),
+    (4.0, 0.0141, 1.2754),
 ]
 
 
@@ -329,8 +335,9 @@ def enumerate_fresh_round_edge(
     rules: Rules,
     calc: OddsCalculator | None = None,
     pair_cache: dict[tuple[int, int], tuple[float, float]] | None = None,
-) -> tuple[float, float]:
-    """Exact EV and mean round variance of a fresh round from this shoe.
+) -> tuple[float, float, float]:
+    """Exact EV, mean conditional variance and total round variance of a
+    fresh round from this shoe.
 
     Enumerates every (player hand, upcard) combination with its deal
     probability and values each with fresh_round_moments, so the result
@@ -340,15 +347,27 @@ def enumerate_fresh_round_edge(
     shortcut instead. A calculator with keep_dealer_cache is used when
     none is passed: it roughly halves the cost, since most dealer states
     are shared between situations on nearly the same shoe.
+
+    The three numbers are the mean EV, the mean conditional variance
+    (the variance of the round once the dealt hand is known, averaged
+    over deals), and the total round variance. The total adds the spread
+    of the hand EVs themselves: total = mean conditional var + Var(ev),
+    where Var(ev) = E[ev^2] - edge^2 over the deal distribution. The
+    total is the one the Kelly formula needs, because the bet is placed
+    before the cards are dealt: the hand you are dealt is part of the
+    round's risk, not something known when you size the bet.
     """
     calc = calc or OddsCalculator(rules, keep_dealer_cache=True)
     edge = 0.0
     mean_var = 0.0
+    mean_e2 = 0.0
     for hand, upcard, unseen, weight in _deal_situations(counts, rules.num_decks):
         ev, var = fresh_round_moments(hand, upcard, unseen, rules, calc, pair_cache)
         edge += weight * ev
         mean_var += weight * var
-    return edge, mean_var
+        mean_e2 += weight * ev * ev
+    total_var = mean_var + (mean_e2 - edge * edge)
+    return edge, mean_var, total_var
 
 
 def measure_bucket(
@@ -360,7 +379,8 @@ def measure_bucket(
     compositions: int = 1,
     pair_cache: dict[tuple[int, int], tuple[float, float]] | None = None,
 ) -> dict[str, float | int]:
-    """Exact edge and mean round variance at one true count.
+    """Exact edge, conditional variance and total round variance at one
+    true count.
 
     Samples `compositions` shoe compositions inside the bucket and
     enumerates the fresh-round edge of each, then averages. With one
@@ -369,11 +389,14 @@ def measure_bucket(
     the same count. A fresh odds calculator is made per bucket, so the
     dealer cache it keeps stays bounded. Returns the bucket, the number
     of compositions, the mean EV per unit bet, the spread of the
-    enumerated edges across compositions (zero with one), and the mean
-    round variance per unit bet squared.
+    enumerated edges across compositions (zero with one), the mean
+    conditional round variance per unit bet squared, and the mean total
+    round variance, which is the conditional variance plus the spread
+    of the hand EVs across deals. The total is what Kelly sizing reads.
     """
     edges: list[float] = []
     varis: list[float] = []
+    total_varis: list[float] = []
     attempts = 0
     while len(edges) < compositions and attempts < compositions * 10:
         attempts += 1
@@ -382,12 +405,14 @@ def measure_bucket(
             continue
         counts, _running = sampled
         calc = OddsCalculator(rules, keep_dealer_cache=True)
-        ev, var = enumerate_fresh_round_edge(counts, rules, calc, pair_cache)
+        ev, var, total_var = enumerate_fresh_round_edge(counts, rules, calc, pair_cache)
         edges.append(ev)
         varis.append(var)
+        total_varis.append(total_var)
     n = len(edges)
     mean_ev = sum(edges) / n if n else 0.0
     mean_var = sum(varis) / n if n else 0.0
+    mean_total_var = sum(total_varis) / n if n else 0.0
     if n > 1:
         se = (sum((x - mean_ev) ** 2 for x in edges) / (n * (n - 1))) ** 0.5
     else:
@@ -400,6 +425,7 @@ def measure_bucket(
         "mean_ev": mean_ev,
         "se_ev": se,
         "mean_var": mean_var,
+        "mean_total_var": mean_total_var,
     }
 
 
@@ -415,7 +441,7 @@ def measure_curve(
 
     Each bucket is enumerated exactly, so this is slow: about seventeen
     minutes a bucket on a six-deck shoe with every pair exact, about
-    five and a half with a warmed slow-pair cache. Run it as a script,
+    a minute and a half with a warmed slow-pair cache. Run it as a script,
     not in a test. pair_cache stays None by default, so pairs are valued
     exactly. Pass a warmed cache to value the slow low pairs by premium
     and every other pair exactly.
