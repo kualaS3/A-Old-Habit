@@ -24,7 +24,7 @@ deck plus the dealer's face-down card) and works through every possible way the 
 - **Stand**: you stop here, and the dealer draws to 17 or more.
 - **Hit**: you take one card, then play whichever is better from there, stand or hit again.
 
-Running it: see the main README at the top of the repo — the instructions are the same for every iteration.
+Running it: see the main README at the top of the repo. The instructions are the same for every iteration.
 
 ### Project layout
 
