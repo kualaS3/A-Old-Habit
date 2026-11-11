@@ -178,7 +178,7 @@ def test_insurance_is_not_offered_when_the_balance_cannot_cover_it():
     rnd = stacked_round(
         [C(Rank.TEN), C(Rank.ACE), C(Rank.SEVEN), C(Rank.NINE)], balance=10
     )
-    # $10 is already at risk on the hand; half the bet ($5) more is not covered.
+    # $10 is already at risk on the hand. Half the bet ($5) more is not covered.
     assert not rnd.can_insure()
 
 
@@ -312,7 +312,7 @@ def test_starting_balance_comes_from_config():
 # ---- the split engine: the C decomposition, one split by default --------------------
 #
 # _hand_after (the single-hand check) moved with the Python decomposition to
-# the archive; see tests/test_archive.py. The value below is the one-split
+# the archive. See tests/test_archive.py. The value below is the one-split
 # value on the small pool: at three splits it was -0.4280 instead, and the
 # joint reads -0.4193 there.
 

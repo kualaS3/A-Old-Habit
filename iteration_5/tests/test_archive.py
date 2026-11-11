@@ -3,7 +3,7 @@
 It is NOT imported by the game -- the live engine is the C port of this same
 algorithm -- but it is kept to show the attempt, and it must still work: it is
 the reference the C port was checked against. These tests run on small pools,
-where the Python version takes about a second a spot; on a full deck it takes
+where the Python version takes about a second a spot. On a full deck it takes
 minutes, which is why it is archived.
 
 The archived entry point sets up the calculator's split caches itself (the
@@ -48,7 +48,7 @@ def test_hand_after_agrees_with_optimal_play():
     pool = (2, 2, 2, 2, 2, 2, 2, 2, 2, 8)
     calc = OddsCalculator(Rules())
     a = calc.analyze(hand(Rank.EIGHT, Rank.TWO), C(Rank.SIX), pool)
-    # Analyze first: _hand_after reads the upcard set up by it; the caches
+    # Analyze first: _hand_after reads the upcard set up by it. The caches
     # are the archive's own, set up here.
     calc._split_cache = {}
     calc._remaining_cache = {}

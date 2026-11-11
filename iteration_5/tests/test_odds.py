@@ -68,8 +68,8 @@ def test_obvious_decisions(calc):
 def test_known_values_cross_checked_against_monte_carlo(calc):
     # 7+5 vs dealer King, unseen = deck minus those three cards.
     # Iteration 2: the king upcard means the dealer has peeked, so these values
-    # are conditioned on the hole card not being an ace (no dealer blackjack);
-    # iteration 1's unconditioned figures were 0.2175 / 0.7825. Cross-checked
+    # are conditioned on the hole card not being an ace (no dealer blackjack).
+    # Iteration 1's unconditioned figures were 0.2175 / 0.7825. Cross-checked
     # against a peek-aware Monte Carlo.
     a = calc.analyze(
         hand(Rank.SEVEN, Rank.FIVE), card(Rank.KING), deck_minus(Rank.SEVEN, Rank.FIVE, Rank.KING)

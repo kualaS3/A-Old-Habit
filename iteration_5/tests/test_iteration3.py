@@ -1,10 +1,10 @@
 """Iteration 3: variable bets, the Player, and splitting (game + odds).
 
-The split odds were an independent-hands approximation in iteration 3; iteration 5
+The split odds were an independent-hands approximation in iteration 3. Iteration 5
 replaced them with the C decomposition engine (see odds.py and split_exact.py).
 The split tests below run on a small unseen pool: the engine takes a few seconds
 on a full deck, and about a second on this pool. The default split cap is one
-(Rules.max_splits = 1), so the values below are the one-split values; the
+(Rules.max_splits = 1), so the values below are the one-split values. The
 resplit cases are tested with the cap raised explicitly.
 """
 import random
@@ -91,7 +91,7 @@ def test_variable_bet_scales_the_result():
          C(Rank.NINE, CL)],
         bet=5,
     )
-    rnd2.dealer_play()  # dealer 16 draws 9 and busts; player 18 wins the $5 bet
+    rnd2.dealer_play()  # dealer 16 draws 9 and busts. Player 18 wins the $5 bet
     assert rnd2.net_dollars() == 5
 
 
@@ -170,7 +170,7 @@ def test_jack_queen_cannot_split():
 
 
 def test_resplitting_stops_at_the_cap():
-    # A synthetic stack with more 8s than a real deck holds; stacked shoes allow it.
+    # A synthetic stack with more 8s than a real deck holds. Stacked shoes allow it.
     # The cap is raised explicitly here: the default is one split (see below).
     rnd = stacked_round(
         [C(Rank.EIGHT, S), C(Rank.SIX, H), C(Rank.EIGHT, H), C(Rank.TEN, D),

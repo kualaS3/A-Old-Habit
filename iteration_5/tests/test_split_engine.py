@@ -65,7 +65,7 @@ def test_joint_small_pool_three_splits():
     # The exact values the decomposition is checked against. The 8,8 vs 6
     # gap (joint +0.4440, decomposition +0.3868) is the one spot where the
     # second-order coupling shows, on a pool where one card is a twelfth of
-    # the shoe; at full-deck scale the gap is far smaller.
+    # the shoe. At full-deck scale the gap is far smaller.
     assert split_exact.split_ev(
         SMALL_POOL, 8, False, 6, False, None, Rules(max_splits=3)
     ) == pytest.approx(0.4440, abs=0.001)

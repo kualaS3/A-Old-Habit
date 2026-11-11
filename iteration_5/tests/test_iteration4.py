@@ -73,7 +73,7 @@ def test_defaults_are_surrender_on_blackjack_three_to_two_stand_on_soft_17():
 
 
 def test_blackjack_payout_only_allows_three_to_two_or_two_to_one():
-    # Iteration 5 added 6:5 as a third option; anything else still raises.
+    # Iteration 5 added 6:5 as a third option. Anything else still raises.
     assert Rules(blackjack_payout=(2, 1)).blackjack_payout_ratio == pytest.approx(2.0)
     assert Rules(blackjack_payout=(6, 5)).blackjack_payout_ratio == pytest.approx(1.2)
     with pytest.raises(ValueError):
@@ -289,7 +289,7 @@ def test_dealer_stands_on_soft_seventeen_by_default_and_hits_when_configured():
 
 def test_hitting_soft_seventeen_costs_the_player_on_eighteen_against_an_ace(calc):
     # Standing on 18 vs an ace: under S17 the dealer standing on 17 is a certain
-    # win for the 18; under H17 the dealer can improve to 18-21, so the EV falls.
+    # win for the 18. Under H17 the dealer can improve to 18-21, so the EV falls.
     unseen = deck_minus(Rank.TEN, Rank.EIGHT, Rank.ACE)
     s17 = calc.analyze(hand(Rank.TEN, Rank.EIGHT), card(Rank.ACE), unseen)
     h17 = OddsCalculator(Rules(dealer_hits_soft_17=True)).analyze(
