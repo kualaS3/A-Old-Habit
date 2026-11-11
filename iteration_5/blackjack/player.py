@@ -1,7 +1,7 @@
 """The player: a bankroll plus the hands they are playing this round.
 
 Money has two homes, deliberately. The pot lives here on the Player (it survives
-every hand and every round); each wager lives on its Hand, because a double changes
+every hand and every round). Each wager lives on its Hand, because a double changes
 that hand's stake and a split creates new wagers. This is also the shape that lets
 more players sit down later: each gets their own Player, hands and bankroll alike.
 """

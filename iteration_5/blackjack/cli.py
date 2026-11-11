@@ -12,7 +12,7 @@ holds them ($101.50 after a 3:2 blackjack on an odd bet, say).
 Iteration 5: the table comes from Rules - the shoe (decks, cut, burn card), the
 money (starting balance, table min/max), and the rule toggles. Insurance is
 offered before the peek when the dealer shows an ace, and even money on a player
-blackjack against an ace; both show their EV before you answer. The shoe is
+blackjack against an ace. Both show their EV before you answer. The shoe is
 reshuffled when the cut card is reached, after the round in progress finishes.
 """
 from __future__ import annotations
@@ -37,7 +37,7 @@ def _prompt() -> str | None:
 
 
 def _prompt_yes_no(question: str) -> bool:
-    """Ask a yes/no question; anything starting with y is yes, EOF is no."""
+    """Ask a yes/no question. Anything starting with y is yes, EOF is no."""
     try:
         raw = input(f"{question} (y/n): ").strip().lower()
     except EOFError:
@@ -89,7 +89,7 @@ def _print_analysis(analysis: Analysis) -> None:
             continue
         o = analysis.odds(action)
         if action is Action.SPLIT:
-            # win/push/lose for a split are per hand; only the combined EV is shown.
+            # win/push/lose for a split are per hand. Only the combined EV is shown.
             print(f"  {'SPLIT':<6} EV {o.ev:+.3f}  (both hands, near-exact)")
         elif action is Action.SURRENDER:
             # Surrender has no win/push/lose split: you always lose half the stake.

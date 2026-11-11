@@ -7,7 +7,7 @@ when a round settles, by the round's net dollars (won positive, lost negative).
 Iteration 4: the balance is a float, not an int. A 3:2 blackjack on an odd bet
 pays $1.50, and a surrender gives back half a stake - both are fifty-cent amounts,
 so whole dollars can no longer hold the balance exactly. Bets are still whole
-dollars; only the pot can hold halves.
+dollars. Only the pot can hold halves.
 """
 from __future__ import annotations
 
@@ -25,6 +25,6 @@ class Bankroll:
         return self._balance
 
     def settle(self, net_dollars: float) -> float:
-        """Apply a round's net result in dollars; returns the new balance."""
+        """Apply a round's net result in dollars. It returns the new balance."""
         self._balance += net_dollars
         return self._balance

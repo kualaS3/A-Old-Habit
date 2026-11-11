@@ -13,13 +13,13 @@ Iteration 4: three more table options, all on this object because it is the conf
 - blackjack_payout: what a natural pays, 3:2 or 2:1, default 3:2. Only those two
   are allowed - anything else is a table that does not exist, so it is rejected.
 - dealer_hits_soft_17: S17 (stand) by default, H17 when True. This field already
-  existed; iteration 4 wires it through the game and the odds and tests it.
+  existed. Iteration 4 wires it through the game and the odds and tests it.
 
 Iteration 5: Rules is now the whole table config - the shoe, the money and the
 rule toggles live here too, so one object describes the table you are sitting at:
 - num_decks: 1-8, default 1. The shoe is built from this.
 - cut_cards / cut_fraction: where the cut card goes, in cards dealt. An exact
-  cut_cards wins when set; otherwise the cut is placed at cut_fraction of the
+  cut_cards wins when set. Otherwise the cut is placed at cut_fraction of the
   shoe (3/4, 2/3 or 1/2 - the realistic penetrations) plus a random jitter of
   up to 5 cards either way, re-rolled on every shuffle. A round in progress
   always finishes before the reshuffle.
@@ -52,14 +52,14 @@ class Rules:
     # exact split value cannot be computed with resplits (the joint
     # recursion runs out of memory at three splits, and the live
     # decomposition engine takes ~18s at two splits and runs out of memory
-    # at three; see the iteration 5 README). One split is the case the
+    # at three. See the iteration 5 README). One split is the case the
     # engine can verify exactly, in a few seconds. Raise it only knowing that.
     max_splits: int = 1
     surrender_allowed: bool = True
     blackjack_payout: tuple[int, int] = (3, 2)  # profit per unit staked on a natural
     # -- iteration 5: the shoe --
     num_decks: int = 1
-    cut_cards: int | None = None  # exact cut, in cards dealt; None = use cut_fraction
+    cut_cards: int | None = None  # exact cut, in cards dealt. None = use cut_fraction
     cut_fraction: float = 0.75  # penetration when cut_cards is None
     burn_card: bool = True
     # -- iteration 5: the money --

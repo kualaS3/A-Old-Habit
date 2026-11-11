@@ -46,7 +46,7 @@ _lib: ctypes.CDLL | None | False = None
 
 
 def _load() -> ctypes.CDLL | None:
-    """Load the shared library once; None when it is not built."""
+    """Load the shared library once. None when it is not built."""
     global _lib
     if _lib is False:
         return None
@@ -179,7 +179,7 @@ def split_decomp_ev(
 ) -> float:
     """The DECOMPOSITION engine (the live one): the near-exact total EV of
     splitting a pair, per unit staked on the original hand. Same arguments
-    and meaning as split_ev; the value agrees with the joint to about a
+    and meaning as split_ev. The value agrees with the joint to about a
     hundredth at a full deck. Raises RuntimeError when the helper is not
     built.
     """

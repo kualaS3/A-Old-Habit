@@ -1,7 +1,7 @@
 """One round of blackjack: deal, player decisions (including splits), dealer play.
 
 Iteration 3: the round works on the Player's list of hands instead of a single hand.
-A split replaces a pair with two hands in place; the new hands are then played one at
+A split replaces a pair with two hands in place. The new hands are then played one at
 a time, in order, against the same dealer hand. The dealer plays once, at the end,
 and only if at least one player hand is still live.
 """
@@ -39,7 +39,7 @@ class Round:
         self.peeked = False
         self.splits_used = 0
         # Iteration 5: insurance is a side bet on the hole card, taken before
-        # the peek; even money is the same bet on a player blackjack.
+        # the peek. Even money is the same bet on a player blackjack.
         self.insurance_bet: float = 0.0
         self.insurance_decided = False
         self.even_money_taken = False
@@ -50,7 +50,7 @@ class Round:
 
     def deal(self, bet: int) -> None:
         """Two cards each. The dealer's second card (the hole card) stays face down
-        and uncounted; the opening player hand carries the chosen bet."""
+        and uncounted. The opening player hand carries the chosen bet."""
         hand = Hand(bet=bet)
         self.player.hands = [hand]
         hand.add(self._draw_visible())
@@ -94,7 +94,7 @@ class Round:
         """Insurance is offered once, before the peek, when the dealer shows an
         ace - and only if the table allows it and the balance covers half the
         bet on top of everything already at risk. A player blackjack takes
-        even money instead (see take_even_money); it never insures."""
+        even money instead (see take_even_money). It never insures."""
         return (
             self._rules.insurance_allowed
             and not self.peeked
@@ -106,7 +106,7 @@ class Round:
 
     def take_insurance(self) -> None:
         """Insure the hand for half its bet. Pays 2:1 if the dealer has
-        blackjack (see insurance_net); the stake is lost if he does not."""
+        blackjack (see insurance_net). The stake is lost if he does not."""
         self.insurance_bet = self.hands[0].bet / 2
         self.insurance_decided = True
 
@@ -125,7 +125,7 @@ class Round:
         )
 
     def take_even_money(self) -> None:
-        """Take 1:1 on the blackjack at once. The round is over; the dealer
+        """Take 1:1 on the blackjack at once. The round is over. The dealer
         never plays and the peek never matters."""
         self.even_money_taken = True
         self.insurance_decided = True
@@ -242,7 +242,7 @@ class Round:
     # ---- dealer and settlement ----------------------------------------------------
 
     def dealer_play(self) -> None:
-        """Reveal the hole card; the dealer draws only if some player hand is live.
+        """Reveal the hole card. The dealer draws only if some player hand is live.
 
         A hand is live when it is neither bust nor surrendered. A surrendered
         hand never makes the dealer play on its own - but it does not stop the

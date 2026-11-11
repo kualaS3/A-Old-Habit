@@ -31,7 +31,7 @@ itself runs out of memory at three splits -- which is why the table caps
 splits at one by default (Rules.max_splits). The old independent-hands
 approximation read about 0.05 low against a 6, 0.08 low splitting aces
 against a 5, and overstated splitting by about 0.18 against a ten (8,8 vs
-10: approx -0.453, true -0.633); the new values agree with a simulation of
+10: approx -0.453, true -0.633). The new values agree with a simulation of
 the true game within its noise. One honest limit remains: the per-hand
 HIT/STAND odds shown while you are playing a split hand still value that
 hand alone - the other split hand's future draws are in the unseen pool it
@@ -103,7 +103,7 @@ class OutcomeOdds:
     ev_override exists for SPLIT and SURRENDER: the total EV of several hands,
     each possibly played on a doubled stake, cannot be summarised by one
     (win - lose) * stake, so the exact total EV is carried explicitly. For
-    SURRENDER the win/push/lose split is the certain loss (0/0/1); for SPLIT
+    SURRENDER the win/push/lose split is the certain loss (0/0/1). For SPLIT
     no per-hand probabilities are tracked at all (0/0/0) - the hands' outcomes
     are correlated through the one dealer hand, so a per-hand split would be
     a fiction. Surrender's EV is exactly -0.5 per unit staked, which no
@@ -166,7 +166,7 @@ class Analysis:
         return action in self.by_action
 
     def best(self) -> Action:
-        """Highest-EV action; STAND wins ties."""
+        """Highest-EV action. STAND wins ties."""
         best = Action.STAND
         for action, o in self.by_action.items():
             if o.ev > self.by_action[best].ev + 1e-12:
@@ -203,7 +203,7 @@ class OddsCalculator:
         (shoe contents plus the dealer's hole card).
 
         allow_split is set by the caller (the Round knows the split cap and whether
-        the balance covers another stake); the SPLIT odds are the near-exact
+        the balance covers another stake). The SPLIT odds are the near-exact
         value from the C decomposition engine (_split_odds), not the old
         independent-hands approximation.
         """
@@ -331,7 +331,7 @@ class OddsCalculator:
         """Take exactly one card, then stand, with the stake doubled.
 
         The win/push/lose figures are the same probabilities as standing after one
-        card; only the EV doubles, via stake=2.
+        card. Only the EV doubles, via stake=2.
         """
         n = sum(counts)
         acc = NO_ODDS
@@ -355,7 +355,7 @@ class OddsCalculator:
     # the hand being split maximising the TOTAL ev, the later hands each
     # maximising their own ev against the expected dealer distribution. The
     # pure-Python version of that algorithm is archived at
-    # blackjack/archive/split_sequential.py; the C port is the live engine
+    # blackjack/archive/split_sequential.py. The C port is the live engine
     # because the Python one takes minutes a spot on a full deck. The C
     # joint recursion (split_exact.split_ev) is the exact check, not the
     # live engine. See the module docstring and the iteration 5 README.
@@ -414,8 +414,8 @@ class OddsCalculator:
     ) -> list[float]:
         """Distribution of the dealer's final result. Returned lists are read-only.
 
-        exclude_first: on this (outermost) call only, the first card drawn — which
-        models the hole card — may not have this blackjack value, and the draw is
+        exclude_first: on this (outermost) call only, the first card drawn (which
+        models the hole card) may not have this blackjack value, and the draw is
         renormalised without it. That is the peek condition. Deeper draws are
         unconditioned. If every unseen card has the excluded value there is nothing
         to condition on and the draw falls back to unconditioned.
