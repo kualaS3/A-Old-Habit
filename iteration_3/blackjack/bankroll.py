@@ -20,6 +20,6 @@ class Bankroll:
         return self._balance
 
     def settle(self, net_dollars: int) -> int:
-        """Apply a round's net result in dollars; returns the new balance."""
+        """Apply a round's net result in dollars. It returns the new balance."""
         self._balance += net_dollars
         return self._balance
