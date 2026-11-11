@@ -9,7 +9,7 @@ Iteration 4: three more table options, all on this object because it is the conf
 - blackjack_payout: what a natural pays, 3:2 or 2:1, default 3:2. Only those two
   are allowed - anything else is a table that does not exist, so it is rejected.
 - dealer_hits_soft_17: S17 (stand) by default, H17 when True. This field already
-  existed; iteration 4 wires it through the game and the odds and tests it.
+  existed. Iteration 4 wires it through the game and the odds and tests it.
 """
 
 from __future__ import annotations

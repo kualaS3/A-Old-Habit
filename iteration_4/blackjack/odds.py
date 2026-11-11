@@ -72,7 +72,7 @@ class OutcomeOdds:
     ev_override exists for SPLIT and SURRENDER: two independently valued hands,
     each possibly played on a doubled stake, cannot be summarised by one
     (win - lose) * stake, so the approximated EV is carried explicitly while
-    win/push/lose stay the per-hand probabilities; surrender's EV is exactly
+    win/push/lose stay the per-hand probabilities. Surrender's EV is exactly
     -0.5 per unit staked, which no win/push/lose split can express either.
     """
 
@@ -132,7 +132,7 @@ class Analysis:
         return action in self.by_action
 
     def best(self) -> Action:
-        """Highest-EV action; STAND wins ties."""
+        """Highest-EV action. STAND wins ties."""
         best = Action.STAND
         for action, o in self.by_action.items():
             if o.ev > self.by_action[best].ev + 1e-12:
@@ -165,7 +165,7 @@ class OddsCalculator:
         (shoe contents plus the dealer's hole card).
 
         allow_split is set by the caller (the Round knows the split cap and whether
-        the balance covers another stake); the SPLIT odds themselves are the one
+        the balance covers another stake). The SPLIT odds themselves are the one
         approximation in this engine - see _split_odds.
         """
         self._dealer_cache.clear()
@@ -258,7 +258,7 @@ class OddsCalculator:
         """Take exactly one card, then stand, with the stake doubled.
 
         The win/push/lose figures are the same probabilities as standing after one
-        card; only the EV doubles, via stake=2.
+        card. Only the EV doubles, via stake=2.
         """
         n = sum(counts)
         acc = NO_ODDS
@@ -285,7 +285,7 @@ class OddsCalculator:
         Each split hand is valued on its own: start from the pair's single card, draw
         one card from the unseen composition, then play that two-card hand optimally
         (double included). The split is worth two such hands. Returned win/push/lose
-        are the per-hand probabilities; the EV - twice one hand's expected value,
+        are the per-hand probabilities. The EV - twice one hand's expected value,
         doubles included - rides in ev_override.
         """
         win = push = lose = ev = 0.0
@@ -340,8 +340,8 @@ class OddsCalculator:
     ) -> list[float]:
         """Distribution of the dealer's final result. Returned lists are read-only.
 
-        exclude_first: on this (outermost) call only, the first card drawn — which
-        models the hole card — may not have this blackjack value, and the draw is
+        exclude_first: on this (outermost) call only, the first card drawn (which
+        models the hole card) may not have this blackjack value, and the draw is
         renormalised without it. That is the peek condition. Deeper draws are
         unconditioned. If every unseen card has the excluded value there is nothing
         to condition on and the draw falls back to unconditioned.

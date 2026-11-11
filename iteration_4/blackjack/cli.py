@@ -73,7 +73,7 @@ def _print_analysis(analysis: Analysis) -> None:
             continue
         o = analysis.odds(action)
         if action is Action.SPLIT:
-            # win/push/lose for a split are per hand; only the combined EV is shown.
+            # win/push/lose for a split are per hand. Only the combined EV is shown.
             print(f"  {'SPLIT':<6} EV {o.ev:+.3f}  (both hands, approximated)")
         elif action is Action.SURRENDER:
             # Surrender has no win/push/lose split: you always lose half the stake.
